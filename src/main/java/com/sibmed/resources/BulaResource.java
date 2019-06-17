@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
 import com.sibmed.services.BulaService;
+import com.sibmed.services.utils.ArquivoService;
 
 @RestController
 @RequestMapping(value="/bulas")
@@ -21,11 +22,12 @@ public class BulaResource {
 	public static final String uploadingDir = System.getProperty("user.dir") + "/arquivosDir/";
 	
 	@Autowired
-	private BulaService service;
-	
+	private BulaService bulaService;
+	@Autowired
+	private ArquivoService arqService;
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id){
-		Bula obj = service.find(id);
+		Bula obj = bulaService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -35,6 +37,7 @@ public class BulaResource {
             File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
             uploadedFile.transferTo(file);
              System.out.println(file.getPath());
+            arqService.ExtrairPDF(file);
         }
         return "Arquivo carregado com sucesso!";
  }
