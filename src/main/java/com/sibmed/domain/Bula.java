@@ -2,10 +2,12 @@ package com.sibmed.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Bula implements Serializable{
@@ -16,18 +18,28 @@ public class Bula implements Serializable{
 	private Integer id;
 	private String nomeComercial;
 	private String fabricante;
+	@Lob
+	@Column(nullable = true, columnDefinition = "TEXT")
 	private String indicacao;
+	
+	@Lob
+	@Column(nullable = true, columnDefinition = "TEXT")
 	private String contraIndicacao;
+	
+	@Lob
+	@Column(nullable = true, columnDefinition = "TEXT")
+	private String reacaoAdversa;
 	private String dir;
 	public Bula() {	
 	}
 	
-	public Bula(Integer id,String nomeComercial, String fabricante, String indicacao, String contraIndicacao, String dir) {
+	public Bula(Integer id,String nomeComercial, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir) {
 		this.id = id;
 		this.nomeComercial = nomeComercial;
 		this.fabricante = fabricante;
 		this.indicacao = indicacao;
 		this.contraIndicacao = contraIndicacao;
+		this.reacaoAdversa = reacaoAdversa;
 		this.dir = dir;
 	}
 
@@ -77,6 +89,14 @@ public class Bula implements Serializable{
 
 	public void setDir(String dir) {
 		this.dir = dir;
+	}
+
+	public String getReacaoAdversa() {
+		return reacaoAdversa;
+	}
+
+	public void setReacaoAdversa(String reacaoAdversa) {
+		this.reacaoAdversa = reacaoAdversa;
 	}
 
 	@Override

@@ -22,8 +22,8 @@ public class SibmedApplication implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
-		Bula b1 = new Bula(null,"nome", "fabricante", "indicacao", "contraIndicacao", "dir");
-		Bula b2 = new Bula(null,"nome", "fabricante", "indicacao", "contraIndicacao", "dir");
+		Bula b1 = new Bula(null,"nome", "fabricante", "indicacao", "contraIndicacao","reacaoAdversa", "dir");
+		Bula b2 = new Bula(null,"nome", "fabricante", "indicacao", "contraIndicacao","reacaoAdversa", "dir");
  		bulaRepository.saveAll(Arrays.asList(b1,b2));
 	}
 }

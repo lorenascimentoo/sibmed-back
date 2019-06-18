@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
+import com.sibmed.repositories.BulaRepository;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.utils.ArquivoService;
 
@@ -25,6 +26,9 @@ public class BulaResource {
 	private BulaService bulaService;
 	@Autowired
 	private ArquivoService arqService;
+	@Autowired
+	private BulaRepository repo;
+	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id){
 		Bula obj = bulaService.find(id);
@@ -38,6 +42,14 @@ public class BulaResource {
             uploadedFile.transferTo(file);
              System.out.println(file.getPath());
             arqService.ExtrairPDF(file);
+            
+            Bula b = new Bula(null,
+            		arqService.getNomeComercial(),
+            		arqService.getFabricante(),
+            		arqService.getIndicacoes(),
+            		arqService.getContraIndicacoes(),
+            		arqService.getReacoesAdversas(), file.getPath());
+            repo.save(b);
         }
         return "Arquivo carregado com sucesso!";
  }
