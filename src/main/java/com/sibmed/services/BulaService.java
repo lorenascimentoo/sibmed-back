@@ -22,5 +22,10 @@ public class BulaService {
 		return obj.orElse(null);
 	}
 	
+	public Bula insert(Bula obj) {
+		obj.setId(null);
+		return repo.save(obj);
+	}
+	
 	
 }

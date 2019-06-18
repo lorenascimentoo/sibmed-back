@@ -42,19 +42,9 @@ public class ArquivoService {
 				this.nomeComercial = dados.get(0);
 				this.principioAtivo = dados.get(1);
 				this.fabricante = dados.get(2);
-								
-				//List<String> texto = getIndicacoes(pdfFileInText);
 				this.indicacoes = dados.get(3);
 				this.contraIndicacoes = dados.get(4);
 				this.reacoesAdversas = dados.get(5);
-				
-				System.out.println("NOME COMERCIAL: " +nomeComercial);
-				System.out.println("PRINCIPIO ATIVO: " +principioAtivo);
-				System.out.println("FABRICANTE: " +fabricante);
-				System.out.println(""+indicacoes);
-				System.out.println("" +contraIndicacoes);
-				System.out.println(""+reacoesAdversas);
-				System.out.println("-------------------------------------");
 				
 			}
 		}

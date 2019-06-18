@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
-import com.sibmed.repositories.BulaRepository;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.utils.ArquivoService;
+import com.sibmed.services.utils.IndexadorService;
 
 @RestController
 @RequestMapping(value="/bulas")
@@ -24,10 +24,12 @@ public class BulaResource {
 	
 	@Autowired
 	private BulaService bulaService;
+	
 	@Autowired
 	private ArquivoService arqService;
+	
 	@Autowired
-	private BulaRepository repo;
+	private IndexadorService indexService;
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id){
@@ -40,17 +42,16 @@ public class BulaResource {
 		for(MultipartFile uploadedFile : uploadingFiles) {
             File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
             uploadedFile.transferTo(file);
-             System.out.println(file.getPath());
-            arqService.ExtrairPDF(file);
-            
+            arqService.ExtrairPDF(file); 
             Bula b = new Bula(null,
             		arqService.getNomeComercial(),
             		arqService.getFabricante(),
             		arqService.getIndicacoes(),
             		arqService.getContraIndicacoes(),
             		arqService.getReacoesAdversas(), file.getPath());
-            repo.save(b);
+            bulaService.insert(b);
         }
-        return "Arquivo carregado com sucesso!";
+		indexService.indexaArquivosDoDiretorio();
+        return "Upload feito com sucesso!";
  }
 }
