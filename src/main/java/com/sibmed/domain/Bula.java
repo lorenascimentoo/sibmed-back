@@ -17,6 +17,7 @@ public class Bula implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nomeComercial;
+	private String principioAtivo;
 	private String fabricante;
 	@Lob
 	@Column(nullable = true, columnDefinition = "TEXT")
@@ -33,9 +34,10 @@ public class Bula implements Serializable{
 	public Bula() {	
 	}
 	
-	public Bula(Integer id,String nomeComercial, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir) {
+	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir) {
 		this.id = id;
 		this.nomeComercial = nomeComercial;
+		this.principioAtivo = principioAtivo;
 		this.fabricante = fabricante;
 		this.indicacao = indicacao;
 		this.contraIndicacao = contraIndicacao;
@@ -57,6 +59,14 @@ public class Bula implements Serializable{
 
 	public void setNomeComercial(String nomeComercial) {
 		this.nomeComercial = nomeComercial;
+	}
+
+	public String getPrincipioAtivo() {
+		return principioAtivo;
+	}
+
+	public void setPrincipioAtivo(String principioAtivo) {
+		this.principioAtivo = principioAtivo;
 	}
 
 	public String getFabricante() {

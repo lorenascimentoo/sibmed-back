@@ -9,7 +9,6 @@ import java.util.Scanner;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,18 +32,21 @@ public class ArquivoService {
 				
 				//Cria o leitor e faz a leitura do TEXTO para uma String;
 				PDFTextStripper tStripper = new PDFTextStripper();
+				
+				String[] filename = arquivo.getName().split("_");
+				
 				String pdfFileInText = tStripper.getText(document);
 				this.textoExtraido = pdfFileInText;
 				
 				
 				List<String> dados = getBulasInfo(pdfFileInText);
 			   	
-				this.nomeComercial = dados.get(0);
-				this.principioAtivo = dados.get(1);
-				this.fabricante = dados.get(2);
-				this.indicacoes = dados.get(3);
-				this.contraIndicacoes = dados.get(4);
-				this.reacoesAdversas = dados.get(5);
+				this.nomeComercial = filename[1].toUpperCase().replace(".PDF", "");
+				this.principioAtivo = filename[0].toUpperCase();
+				this.fabricante = dados.get(0).toUpperCase();
+				this.indicacoes = dados.get(1);
+				this.contraIndicacoes = dados.get(2);
+				this.reacoesAdversas = dados.get(3);
 				
 			}
 		}
@@ -66,10 +68,9 @@ public class ArquivoService {
 				}
 			}
 		}
-
+		
 		List<String> dados = new ArrayList<>();
-		dados.add(line.get(0));
-		dados.add(line.get(1));
+		
 		dados.add(fabricante);
 		
 		List<String> indicacao = new ArrayList<String>();

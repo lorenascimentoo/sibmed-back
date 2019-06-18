@@ -45,6 +45,7 @@ public class BulaResource {
             arqService.ExtrairPDF(file); 
             Bula b = new Bula(null,
             		arqService.getNomeComercial(),
+            		arqService.getPrincipioAtivo(),
             		arqService.getFabricante(),
             		arqService.getIndicacoes(),
             		arqService.getContraIndicacoes(),
