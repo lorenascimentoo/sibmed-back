@@ -7,7 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Bula implements Serializable{
@@ -32,6 +34,8 @@ public class Bula implements Serializable{
 	private String reacaoAdversa;
 	private String dir;
 	
+	@ManyToOne
+	@JoinColumn(name="evidencia_id")
 	private Evidencia evidencia;
 	
 	public Bula() {	

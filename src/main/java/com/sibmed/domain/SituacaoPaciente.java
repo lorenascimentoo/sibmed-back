@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 @Entity
 public class SituacaoPaciente implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -16,6 +18,8 @@ public class SituacaoPaciente implements Serializable{
 	private Integer estado;
 	private String periodo;
 	
+	@ManyToOne
+	@JoinColumn(name="evidencia_id")
 	private Evidencia evidencia;
 	
 	public SituacaoPaciente(Integer id, Integer estado, String periodo) {

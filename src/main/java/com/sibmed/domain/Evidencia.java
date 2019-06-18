@@ -1,12 +1,16 @@
 package com.sibmed.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sibmed.domain.enums.TipoCategoria;
 
 @Entity
@@ -21,9 +25,13 @@ public class Evidencia implements Serializable{
 	
 	private Integer categoria;
 	
-	private Bula bula;
+	@JsonIgnore
+	@OneToMany(mappedBy="evidencia")
+	private List<Bula> bulas = new ArrayList<>(); 
 	
-	private SituacaoPaciente sitPaciente;
+	@JsonIgnore
+	@OneToMany(mappedBy="evidencia")
+	private List<SituacaoPaciente> situacaoPaciente = new ArrayList<>();
 	
 	public Evidencia(Integer id, String principioAtivo, TipoCategoria categoria) {
 		super();
@@ -50,21 +58,21 @@ public class Evidencia implements Serializable{
 	public void setCategoria(Integer categoria) {
 		this.categoria = categoria;
 	}
-
-	public SituacaoPaciente getSitPaciente() {
-		return sitPaciente;
+	
+	public List<SituacaoPaciente> getSituacaoPaciente() {
+		return situacaoPaciente;
 	}
 
-	public void setSitPaciente(SituacaoPaciente sitPaciente) {
-		this.sitPaciente = sitPaciente;
+	public void setSituacaoPaciente(List<SituacaoPaciente> situacaoPaciente) {
+		this.situacaoPaciente = situacaoPaciente;
 	}
 
-	public Bula getBula() {
-		return bula;
+	public List<Bula> getBulas() {
+		return bulas;
 	}
 
-	public void setBula(Bula bula) {
-		this.bula = bula;
+	public void setBulas(List<Bula> bulas) {
+		this.bulas = bulas;
 	}
 
 	@Override
