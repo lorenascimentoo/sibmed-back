@@ -31,6 +31,9 @@ public class Bula implements Serializable{
 	@Column(nullable = true, columnDefinition = "TEXT")
 	private String reacaoAdversa;
 	private String dir;
+	
+	private Evidencia evidencia;
+	
 	public Bula() {	
 	}
 	
@@ -107,6 +110,14 @@ public class Bula implements Serializable{
 
 	public void setReacaoAdversa(String reacaoAdversa) {
 		this.reacaoAdversa = reacaoAdversa;
+	}
+
+	public Evidencia getEvidencia() {
+		return evidencia;
+	}
+
+	public void setEvidencia(Evidencia evidencia) {
+		this.evidencia = evidencia;
 	}
 
 	@Override
