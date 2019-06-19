@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sibmed.domain.Bula;
 import com.sibmed.domain.Evidencia;
 import com.sibmed.repositories.EvidenciaRepository;
 
@@ -29,5 +30,14 @@ public class EvidenciaService {
 		return repo.save(obj);
 	}
 	
+	public Evidencia saveBula(Evidencia ev, Bula b) {
+		Evidencia newObj = findID(ev.getId());
+		updateData(newObj, b);
+		return repo.save(newObj);
+	}
 	
+	
+	private void updateData(Evidencia newObj, Bula b) {
+		newObj.getBulas().add(b);
+	}
 }

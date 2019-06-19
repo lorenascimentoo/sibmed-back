@@ -11,14 +11,14 @@ import com.sibmed.domain.Evidencia;
 import com.sibmed.services.EvidenciaService;
 
 @RestController
-@RequestMapping(value="/evidencias")
+@RequestMapping(value = "/evidencias")
 public class EvidenciaResource {
 	@Autowired
 	private EvidenciaService evidService;
-	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id){
-		Evidencia obj = evidService.findID(id);
+
+	@RequestMapping(value="/{string}",method=RequestMethod.GET)
+	public ResponseEntity<Evidencia> findPrincAtivo(@PathVariable String string) {
+		Evidencia obj = evidService.findPrincAtivo(string);
 		return ResponseEntity.ok().body(obj);
 	}
 }

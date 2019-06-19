@@ -24,7 +24,7 @@ public class SituacaoPaciente implements Serializable{
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="evidencia_id")
+	@JoinColumn(name="evidencia_situacao_id")
 	private Evidencia evidencia;
 	
 	public SituacaoPaciente() {

@@ -36,7 +36,7 @@ public class Bula implements Serializable{
 	private String dir;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name="evidencia_id")
+	@JoinColumn(name="evidencia_bula_id")
 	private Evidencia evidencia;
 	
 	public Bula() {	

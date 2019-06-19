@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
-import com.sibmed.domain.Evidencia;
 import com.sibmed.domain.dto.BulaDTO;
-import com.sibmed.domain.enums.TipoCategoria;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
@@ -45,7 +43,7 @@ public class BulaResource {
 	}
 	
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseEntity<?> find(@PathVariable Integer id){
+	public ResponseEntity<Bula> find(@PathVariable Integer id){
 		Bula obj = bulaService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
@@ -55,20 +53,19 @@ public class BulaResource {
 		for(MultipartFile uploadedFile : uploadingFiles) {
             File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
             uploadedFile.transferTo(file);
-            arqService.ExtrairPDF(file);
-            Evidencia e1 = new Evidencia(null, "principioAtivo", TipoCategoria.RISCO_A);            
-            	Bula b = new Bula(null,
+            arqService.ExtrairPDF(file);                      
+            Bula b = new Bula(null,
                 		arqService.getNomeComercial(),
                 		arqService.getPrincipioAtivo(),
                 		arqService.getFabricante(),
                 		arqService.getIndicacoes(),
                 		arqService.getContraIndicacoes(),
                 		arqService.getReacoesAdversas(),
-                		file.getPath(), e1);
-                bulaService.insert(b);
-  
-            
+                		file.getPath(),null);
+           bulaService.insert(b);
+           
         }
+		
 		indexService.indexaArquivosDoDiretorio();
         return "Upload feito com sucesso!";
  }

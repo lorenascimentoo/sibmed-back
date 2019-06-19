@@ -29,12 +29,12 @@ public class Evidencia implements Serializable{
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
-	@Column(name = "evidencia_id")
+	@Column(name = "evidencia_bula_id")
 	private List<Bula> bulas = new ArrayList<>();
 	
 	
 	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
-	@Column(name = "evidencia_id")
+	@Column(name = "evidencia_situacao_id")
 	private List<SituacaoPaciente> situacaoPaciente = new ArrayList<>();
 	
 	public Evidencia() {
