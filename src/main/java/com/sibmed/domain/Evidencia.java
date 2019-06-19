@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,18 +28,23 @@ public class Evidencia implements Serializable{
 	private Integer categoria;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="evidencia")
-	private List<Bula> bulas = new ArrayList<>(); 
+	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
+	@Column(name = "evidencia_id")
+	private List<Bula> bulas = new ArrayList<>();
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="evidencia")
+	
+	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
+	@Column(name = "evidencia_id")
 	private List<SituacaoPaciente> situacaoPaciente = new ArrayList<>();
+	
+	public Evidencia() {
+	}
 	
 	public Evidencia(Integer id, String principioAtivo, TipoCategoria categoria) {
 		super();
 		this.id = id;
 		this.principioAtivo = principioAtivo;
-		this.categoria = (categoria == null) ? null : categoria.getCod();;
+		this.categoria = (categoria == null) ? null : categoria.getCod();
 	}
 	
 	public Integer getId() {

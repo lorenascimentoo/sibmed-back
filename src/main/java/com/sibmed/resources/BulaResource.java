@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
+import com.sibmed.domain.Evidencia;
+import com.sibmed.domain.enums.TipoCategoria;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.utils.ArquivoService;
 import com.sibmed.services.utils.IndexadorService;
@@ -42,14 +44,16 @@ public class BulaResource {
 		for(MultipartFile uploadedFile : uploadingFiles) {
             File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
             uploadedFile.transferTo(file);
-            arqService.ExtrairPDF(file); 
+            arqService.ExtrairPDF(file);
+            Evidencia e1 = new Evidencia(null, "principioAtivo", TipoCategoria.RISCO_A);
             Bula b = new Bula(null,
             		arqService.getNomeComercial(),
             		arqService.getPrincipioAtivo(),
             		arqService.getFabricante(),
             		arqService.getIndicacoes(),
             		arqService.getContraIndicacoes(),
-            		arqService.getReacoesAdversas(), file.getPath());
+            		arqService.getReacoesAdversas(),
+            		file.getPath(), e1);
             bulaService.insert(b);
         }
 		indexService.indexaArquivosDoDiretorio();

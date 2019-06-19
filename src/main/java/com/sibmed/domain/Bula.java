@@ -2,6 +2,7 @@ package com.sibmed.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,14 +35,14 @@ public class Bula implements Serializable{
 	private String reacaoAdversa;
 	private String dir;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="evidencia_id")
 	private Evidencia evidencia;
 	
 	public Bula() {	
 	}
 	
-	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir) {
+	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir,Evidencia evidencia) {
 		this.id = id;
 		this.nomeComercial = nomeComercial;
 		this.principioAtivo = principioAtivo;
@@ -50,6 +51,7 @@ public class Bula implements Serializable{
 		this.contraIndicacao = contraIndicacao;
 		this.reacaoAdversa = reacaoAdversa;
 		this.dir = dir;
+		this.evidencia = evidencia;
 	}
 
 	public Integer getId() {

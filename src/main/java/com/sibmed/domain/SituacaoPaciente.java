@@ -3,11 +3,15 @@ package com.sibmed.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sibmed.domain.enums.TipoEstadoPaciente;
 @Entity
 public class SituacaoPaciente implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -18,15 +22,20 @@ public class SituacaoPaciente implements Serializable{
 	private Integer estado;
 	private String periodo;
 	
-	@ManyToOne
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="evidencia_id")
 	private Evidencia evidencia;
 	
-	public SituacaoPaciente(Integer id, Integer estado, String periodo) {
+	public SituacaoPaciente() {
+	}
+	
+	public SituacaoPaciente(Integer id, TipoEstadoPaciente estado, String periodo, Evidencia evidencia) {
 		super();
 		this.id = id;
-		this.estado = estado;
+		this.estado = (estado == null) ? null : estado.getCod();;
 		this.periodo = periodo;
+		this.evidencia = evidencia;
 	}
 
 	public Integer getId() {
