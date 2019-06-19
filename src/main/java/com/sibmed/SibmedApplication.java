@@ -37,6 +37,7 @@ public class SibmedApplication implements CommandLineRunner {
 		Evidencia e1 = new Evidencia(null, "principioAtivo", TipoCategoria.RISCO_A);
 		
 		SituacaoPaciente sp1 = new SituacaoPaciente(null, TipoEstadoPaciente.GRAVIDEZ, "Liberado a todos os periodos",e1);
+		SituacaoPaciente sp2 = new SituacaoPaciente(null, TipoEstadoPaciente.LACTANTE, "Liberado a todos os periodos",e1);
 		
 		Bula b1 = new Bula(null,"nome", "principioAtivo", "fabricante", "indicacao", "contraIndicacao","reacaoAdversa", "dir",e1);
 		Bula b2 = new Bula(null,"nome","principioAtivo", "fabricante", "indicacao", "contraIndicacao","reacaoAdversa", "dir",e1);
@@ -45,11 +46,8 @@ public class SibmedApplication implements CommandLineRunner {
 		evidenciaRepository.saveAll(Arrays.asList(e1));
 		sitPacienteRepository.saveAll(Arrays.asList(sp1));
 		
-		e1.getSituacaoPaciente().add(sp1);
-		e1.getBulas().add(b1);
-		e1.getBulas().add(b2);
-		
-		
+		e1.getSituacaoPaciente().addAll(Arrays.asList(sp1,sp2));
+		e1.getBulas().addAll(Arrays.asList(b1,b2));
 		
 	}
 }
