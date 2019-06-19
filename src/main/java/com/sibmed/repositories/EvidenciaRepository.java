@@ -13,5 +13,4 @@ public interface EvidenciaRepository extends JpaRepository<Evidencia, Integer>{
 	Optional<Evidencia> findById(Integer id);
 	
 	Optional<Evidencia> findByPrincipioAtivo(String principioAtivo);
-
 }

@@ -35,6 +35,7 @@ public class BulaResource {
 	@Autowired
 	private IndexadorService indexService;
 	
+
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findAll() throws ObjectNotFoundException {
 		List<Bula> list = bulaService.findAll();
