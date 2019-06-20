@@ -19,6 +19,7 @@ import com.sibmed.domain.dto.BulaDTO;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
+import com.sibmed.services.utils.BuscadorService;
 import com.sibmed.services.utils.IndexadorService;
 
 @RestController
@@ -35,6 +36,8 @@ public class BulaResource {
 	@Autowired
 	private IndexadorService indexService;
 	
+	@Autowired
+	private BuscadorService buscaService;
 
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findAll() throws ObjectNotFoundException {
@@ -47,6 +50,12 @@ public class BulaResource {
 	public ResponseEntity<Bula> find(@PathVariable Integer id){
 		Bula obj = bulaService.find(id);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	@RequestMapping(value="/busca/{string}",method=RequestMethod.GET)
+	public String findBula(@PathVariable String string) {
+		buscaService.buscaComParser(string);
+		return "ok";//ResponseEntity.ok().body(obj);
 	}
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -63,8 +72,7 @@ public class BulaResource {
                 		arqService.getContraIndicacoes(),
                 		arqService.getReacoesAdversas(),
                 		file.getPath(),null);
-           bulaService.insert(b);
-           
+           bulaService.insert(b); 
         }
 		
 		indexService.indexaArquivosDoDiretorio();

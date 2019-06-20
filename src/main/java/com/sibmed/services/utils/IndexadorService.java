@@ -88,7 +88,8 @@ public class IndexadorService  {
 	        try
 			{
 	        	arqService.ExtrairPDF(arquivo);
-				
+	        	logger.info(arqService.getNomeComercial());
+	        	logger.info(arqService.getPrincipioAtivo());
 				indexaArquivo(arquivo, arqService.getTextoExtraido(), arqService.getNomeComercial(), arqService.getPrincipioAtivo(), arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(), arqService.getReacoesAdversas());
 				
 			}catch (Exception e) 
@@ -112,17 +113,17 @@ public class IndexadorService  {
 	        Field.Store.YES, Field.Index.NOT_ANALYZED));
 	    documento.add(new Field("Caminho", arquivo.getAbsolutePath(),
 	        Field.Store.YES, Field.Index.NOT_ANALYZED));
-	    documento.add(new Field("NomeComercial", nomeComercial, Field.Store.YES,
+	    documento.add(new Field("nomeComercial", nomeComercial, Field.Store.YES,
 	            Field.Index.ANALYZED));
-	    documento.add(new Field("PrincipioAtivo", principioAtivo, Field.Store.YES,
+	    documento.add(new Field("principioAtivo", principioAtivo, Field.Store.YES,
 	            Field.Index.ANALYZED));
-	    documento.add(new Field("Fabricante", fabricante, Field.Store.YES,
+	    documento.add(new Field("fabricante", fabricante, Field.Store.YES,
 	            Field.Index.ANALYZED));
-	    documento.add(new Field("", indicacoes, Field.Store.YES,
+	    documento.add(new Field("indicacoes", indicacoes, Field.Store.YES,
 	            Field.Index.ANALYZED));
-	    documento.add(new Field("", contraIndicacoes, Field.Store.YES,
+	    documento.add(new Field("contraIndicacoes", contraIndicacoes, Field.Store.YES,
 	            Field.Index.ANALYZED));
-	    documento.add(new Field("", reacoesAdversas, Field.Store.YES,
+	    documento.add(new Field("reacoesAdversas", reacoesAdversas, Field.Store.YES,
 	            Field.Index.ANALYZED));
 	    documento.add(new Field("Texto", textoExtraido, Field.Store.YES,
 	        Field.Index.ANALYZED));
