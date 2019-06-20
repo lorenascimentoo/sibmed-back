@@ -53,6 +53,11 @@ public class BulaService {
 		return obj.orElse(null);
 	}
 	
+	public Bula findDiretorio(String dir) {
+		Optional<Bula> obj = repo.findByDir(dir);
+		return obj.orElse(null);
+	}
+	
 	public void update(Bula obj) {
 		Bula newObj= find(obj.getId());
 		updateData(newObj, obj);

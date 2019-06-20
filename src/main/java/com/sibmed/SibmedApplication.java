@@ -15,6 +15,7 @@ import com.sibmed.domain.enums.TipoEstadoPaciente;
 import com.sibmed.repositories.BulaRepository;
 import com.sibmed.repositories.EvidenciaRepository;
 import com.sibmed.repositories.SituacaoPacienteRepository;
+import com.sibmed.services.utils.IndexadorService;
 
 @SpringBootApplication
 public class SibmedApplication implements CommandLineRunner {
@@ -27,6 +28,9 @@ public class SibmedApplication implements CommandLineRunner {
 	
 	@Autowired
 	private SituacaoPacienteRepository sitPacienteRepository;
+	
+	@Autowired
+	private IndexadorService indexService;
 	public static void main(String[] args) {
 		SpringApplication.run(SibmedApplication.class, args);
 	}
@@ -54,5 +58,6 @@ public class SibmedApplication implements CommandLineRunner {
 		evidenciaRepository.saveAll(Arrays.asList(e1,e2));
 		sitPacienteRepository.saveAll(Arrays.asList(sp1,sp2,e2_sp1,e2_sp2));
 		
+		indexService.indexaArquivosDoDiretorio();
 	}
 }

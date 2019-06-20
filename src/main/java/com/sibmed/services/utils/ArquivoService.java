@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArquivoService {
 
-	private String nomeComercial;
-	private String principioAtivo;
-	private String fabricante;
-	private String indicacoes;
-	private String contraIndicacoes;
-	private String reacoesAdversas;
-	private String textoExtraido;	
+	private String nomeComercial=null;
+	private String principioAtivo=null;
+	private String fabricante=null;
+	private String indicacoes=null;
+	private String contraIndicacoes=null;
+	private String reacoesAdversas=null;
+	private String textoExtraido=null;	
 	
 	
 	public void ExtrairPDF(File arquivo) throws IOException{

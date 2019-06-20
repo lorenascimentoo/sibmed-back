@@ -12,4 +12,5 @@ public interface BulaRepository extends JpaRepository<Bula, Integer>{
 	
 	Optional<Bula> findById(Integer id);
 	Optional<Bula> findByPrincipioAtivo(String principioAtivo);
+	Optional<Bula> findByDir(String dir);
 }

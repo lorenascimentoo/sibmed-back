@@ -52,10 +52,15 @@ public class BulaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@RequestMapping(value="/busca/{string}",method=RequestMethod.GET)
-	public String findBula(@PathVariable String string) {
-		buscaService.buscaComParser(string);
-		return "ok";//ResponseEntity.ok().body(obj);
+	@RequestMapping(value="/busca",method=RequestMethod.GET)
+	public ResponseEntity<List<BulaDTO>> findBula(
+			@RequestParam(value="indicacao", defaultValue="null")String indicacao,
+			@RequestParam(value="contraIndicacao", defaultValue="null")String contraIndicacao,
+			@RequestParam(value="reacaoAdversa", defaultValue="null")String reacaoAdversa) {
+		buscaService.buscaComParser(indicacao,contraIndicacao,reacaoAdversa);
+		List<Bula> list = buscaService.getList();
+		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
 	}
 	
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
@@ -72,7 +77,7 @@ public class BulaResource {
                 		arqService.getContraIndicacoes(),
                 		arqService.getReacoesAdversas(),
                 		file.getPath(),null);
-           bulaService.insert(b); 
+           bulaService.insert(b);
         }
 		
 		indexService.indexaArquivosDoDiretorio();
