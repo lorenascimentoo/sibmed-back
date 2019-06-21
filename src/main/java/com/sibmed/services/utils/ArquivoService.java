@@ -52,7 +52,7 @@ public class ArquivoService {
 		}
 	}
 
-	public static List<String> getBulasInfo(String pdfFileInText) {
+	private static List<String> getBulasInfo(String pdfFileInText) {
 		// Faz a varredura linha a linha do texto extraído
 		String fabricante = null;
 		Scanner scn = null;
@@ -107,7 +107,7 @@ public class ArquivoService {
 		return dados;
 	}
 
-	public static String getString(List<String> lista) {
+	private static String getString(List<String> lista) {
 		String dado = lista.toString();
 		dado = dado.replaceAll("\\d.", "");
 		return dado;
@@ -139,5 +139,10 @@ public class ArquivoService {
 
 	public String getTextoExtraido() {
 		return textoExtraido;
+	}
+	
+	public void apagaArquivo(String dir) {
+		File arquivo = new File(dir);
+		arquivo.delete();
 	}
 }

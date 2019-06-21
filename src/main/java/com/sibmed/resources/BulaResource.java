@@ -23,64 +23,68 @@ import com.sibmed.services.utils.BuscadorService;
 import com.sibmed.services.utils.IndexadorService;
 
 @RestController
-@RequestMapping(value="/bulas")
+@RequestMapping(value = "/bulas")
 public class BulaResource {
 	public static final String uploadingDir = System.getProperty("user.dir") + "/arquivosDir/";
-	
+
 	@Autowired
 	private BulaService bulaService;
-	
+
 	@Autowired
 	private ArquivoService arqService;
-	
+
 	@Autowired
 	private IndexadorService indexService;
-	
+
 	@Autowired
 	private BuscadorService buscaService;
 
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findAll() throws ObjectNotFoundException {
 		List<Bula> list = bulaService.findAll();
 		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
-		return ResponseEntity.ok().body(listDTO);		
+		return ResponseEntity.ok().body(listDTO);
 	}
-	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseEntity<Bula> find(@PathVariable Integer id){
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Bula> find(@PathVariable Integer id) {
 		Bula obj = bulaService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	@RequestMapping(value="/busca",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/busca", method = RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findBula(
-			@RequestParam(value="indicacao", defaultValue="null")String indicacao,
-			@RequestParam(value="contraIndicacao", defaultValue="null")String contraIndicacao,
-			@RequestParam(value="reacaoAdversa", defaultValue="null")String reacaoAdversa) {
-		buscaService.buscaComParser(indicacao,contraIndicacao,reacaoAdversa);
+			@RequestParam(value = "indicacao", defaultValue = "null") String indicacao,
+			@RequestParam(value = "contraIndicacao", defaultValue = "null") String contraIndicacao,
+			@RequestParam(value = "reacaoAdversa", defaultValue = "null") String reacaoAdversa) {
+		buscaService.buscaComParser(indicacao, contraIndicacao, reacaoAdversa);
 		List<Bula> list = buscaService.getList();
 		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
-	
+
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles) throws IOException {
-		for(MultipartFile uploadedFile : uploadingFiles) {
-            File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
-            uploadedFile.transferTo(file);
-            arqService.ExtrairPDF(file);                      
-            Bula b = new Bula(null,
-                		arqService.getNomeComercial(),
-                		arqService.getPrincipioAtivo(),
-                		arqService.getFabricante(),
-                		arqService.getIndicacoes(),
-                		arqService.getContraIndicacoes(),
-                		arqService.getReacoesAdversas(),
-                		file.getPath(),null);
-           bulaService.insert(b);
-        }
-		
+	public String uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles) throws IOException {
+		String arquivo = null;
+		String resultado = null;
+		for (MultipartFile uploadedFile : uploadingFiles) {
+			try {
+				File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
+				arquivo = file.getPath();
+				uploadedFile.transferTo(file);
+				arqService.ExtrairPDF(file);
+				Bula b = new Bula(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
+						arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
+						arqService.getReacoesAdversas(), file.getPath(), null);
+				bulaService.insert(b);
+				resultado = "Upload feito com sucesso!";
+			} catch (Exception e) {
+				arqService.apagaArquivo(arquivo);
+				resultado = "Erro ao inserir bula, nível de evidência não encontrado no sistema!";
+			}
+		}
+
 		indexService.indexaArquivosDoDiretorio();
-        return "Upload feito com sucesso!";
- }
+		return resultado;
+	}
 }
