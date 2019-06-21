@@ -87,4 +87,10 @@ public class BulaResource {
 		indexService.indexaArquivosDoDiretorio();
 		return resultado;
 	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		bulaService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 }
