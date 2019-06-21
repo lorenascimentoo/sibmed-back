@@ -33,6 +33,7 @@ public class Bula implements Serializable{
 	@Lob
 	@Column(nullable = true, columnDefinition = "TEXT")
 	private String reacaoAdversa;
+	
 	private String dir;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)

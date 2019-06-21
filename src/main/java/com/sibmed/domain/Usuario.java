@@ -1,5 +1,5 @@
 package com.sibmed.domain;
 
-public class Usuario {
-
+public class Usuario {	
+	
 }
