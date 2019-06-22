@@ -58,7 +58,7 @@ public class BulaService {
 				userService.updateBula(objUsuario);
 			}
 		} catch (java.lang.NullPointerException e) {
-			throw new NullPointerException("Não é possível inserir a bula, nível de evidência não encontrado.");
+			throw new NullPointerException("Não é possível inserir a bula.");
 		}
 		return obj;
 	}
@@ -68,7 +68,11 @@ public class BulaService {
 		try {
 			Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
 			objEvidencia.getBulas().remove(obj);
+			Usuario objUsuario = userService.find(obj.getUsuario().getId());
+			objUsuario.getBulas().remove(obj);
 			arqService.apagaArquivo(obj.getDir());
+			userService.update(objUsuario);
+			eService.update(objEvidencia);
 			repo.deleteById(id);
 		}catch(DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possível excluir a bula");
