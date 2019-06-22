@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sibmed.domain.Bula;
 import com.sibmed.domain.dto.BulaDTO;
+import com.sibmed.domain.dto.BulaNewDTO;
 import com.sibmed.services.BulaService;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
@@ -64,32 +65,26 @@ public class BulaResource {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles) throws IOException {
-		String arquivo = null;
+	public ResponseEntity<String> uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles)
+			throws IOException {
 		String resultado = null;
 		for (MultipartFile uploadedFile : uploadingFiles) {
-			try {
-				Integer id=1;
-				File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
-				arquivo = file.getPath();
-				uploadedFile.transferTo(file);
-				arqService.ExtrairPDF(file);
-				Bula b = new Bula(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
-						arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
-						arqService.getReacoesAdversas(), file.getPath(), null,null);
-				bulaService.insert(b, id);
-				resultado = "Upload feito com sucesso!";
-			} catch (Exception e) {
-				arqService.apagaArquivo(arquivo);
-				resultado = "Erro ao inserir bula, nível de evidência não encontrado no sistema!";
-			}
+			File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
+			uploadedFile.transferTo(file);
+			arqService.ExtrairPDF(file);
+			BulaNewDTO bulaDTO = new BulaNewDTO(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
+					arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
+					arqService.getReacoesAdversas(), file.getPath(), null, null);
+			Bula b = bulaService.fromDTO(bulaDTO, 1);
+			bulaService.insert(b);
+			resultado = "Upload feito com sucesso!";
 		}
 
 		indexService.indexaArquivosDoDiretorio();
-		return resultado;
+		return ResponseEntity.ok().body(resultado);
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		bulaService.delete(id);
 		return ResponseEntity.noContent().build();

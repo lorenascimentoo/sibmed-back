@@ -10,7 +10,6 @@ public class SibmedApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(SibmedApplication.class, args);
 	}
-
 	@Override
 	public void run(String... args) throws Exception {
 	}

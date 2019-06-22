@@ -29,10 +29,9 @@ public class Evidencia implements Serializable{
 	private Integer categoria;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="evidencia")
 	@Column(name = "evidencia_bula_id")
 	private List<Bula> bulas = new ArrayList<>();
-	
 	
 	@OneToMany(mappedBy="evidencia", cascade = CascadeType.ALL)
 	@Column(name = "evidencia_situacao_id")

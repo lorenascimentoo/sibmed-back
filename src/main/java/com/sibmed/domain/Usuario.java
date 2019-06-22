@@ -2,18 +2,25 @@ package com.sibmed.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sibmed.domain.enums.Perfil;
+
 
 @Entity
 public class Usuario implements Serializable{	
@@ -23,22 +30,25 @@ private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
 	private String nome;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
+	@Column(unique=true)
 	private String email;
 	
-	@NotEmpty(message="Preenchimento obrigatório")
 	@JsonIgnore
 	private String senha;
 	
+	@ElementCollection(fetch=FetchType.EAGER)
+	@CollectionTable(name="PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
+	
 	@JsonIgnore
-	@OneToMany(mappedBy="usuario", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="usuario",cascade = CascadeType.PERSIST)
 	@Column(name = "usuario_id")
 	private List<Bula> bulas = new ArrayList<>();
 	
 	public Usuario() {
+		addPerfis(Perfil.USUARIO);
 	}
 	
 	public Usuario(Integer id, String nome, String email, String senha) {
@@ -47,6 +57,7 @@ private static final long serialVersionUID = 1L;
 		this.nome = nome;
 		this.email = email;
 		this.senha = senha;
+		addPerfis(Perfil.USUARIO);
 	}
 	
 	public Integer getId() {
@@ -80,6 +91,14 @@ private static final long serialVersionUID = 1L;
 
 	public void setBulas(List<Bula> bulas) {
 		this.bulas = bulas;
+	}
+	
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+
+	public void addPerfis(Perfil perfil) {
+		this.perfis.add(perfil.getCod());;
 	}
 
 	@Override

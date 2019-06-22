@@ -41,7 +41,7 @@ public class DBService {
 
 	public void instantiateTestDatabase() throws ParseException {
 		
-		Usuario u1 = new Usuario(null, "Lorena", "email", pe.encode("123"));
+		Usuario u1 = new Usuario(null, "Lorena", "email@gmail.com", pe.encode("123"));
 				
 		Evidencia e1 = new Evidencia(null, "principioAtivo", TipoCategoria.RISCO_A);
 		SituacaoPaciente sp1 = new SituacaoPaciente(null, TipoEstadoPaciente.GRAVIDEZ, "Liberado a todos os periodos",

@@ -1,56 +1,50 @@
-package com.sibmed.domain;
+package com.sibmed.domain.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
+
+import com.sibmed.domain.Evidencia;
+import com.sibmed.domain.Usuario;
+import com.sibmed.validation.BulaInsert;
 
 
-@Entity
-public class Bula implements Serializable{
+@BulaInsert
+public class BulaNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private Integer id;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String nomeComercial;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String principioAtivo;
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String fabricante;
-	@Lob
-	@Column(nullable = true, columnDefinition = "TEXT")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String indicacao;
-	
-	@Lob
-	@Column(nullable = true, columnDefinition = "TEXT")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String contraIndicacao;
-	
-	@Lob
-	@Column(nullable = true, columnDefinition = "TEXT")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String reacaoAdversa;
-	
-	@Column(unique=true)
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String dir;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="evidencia_bula_id")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private Evidencia evidencia;
-	
-	
-	@ManyToOne
-	@JoinColumn(name="usuario_id")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private Usuario usuario;
 	
-	public Bula() {	
-	}
-	
-	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir,Evidencia evidencia, Usuario usuario) {
+	public BulaNewDTO(@NotEmpty(message = "Preenchimento obrigatório") Integer id,
+			@NotEmpty(message = "Preenchimento obrigatório") String nomeComercial,
+			@NotEmpty(message = "Preenchimento obrigatório") String principioAtivo,
+			@NotEmpty(message = "Preenchimento obrigatório") String fabricante,
+			@NotEmpty(message = "Preenchimento obrigatório") String indicacao,
+			@NotEmpty(message = "Preenchimento obrigatório") String contraIndicacao,
+			@NotEmpty(message = "Preenchimento obrigatório") String reacaoAdversa,
+			@NotEmpty(message = "Preenchimento obrigatório") String dir,
+			@NotEmpty(message = "Preenchimento obrigatório") Evidencia evidencia,
+			@NotEmpty(message = "Preenchimento obrigatório") Usuario usuario) {
+		super();
 		this.id = id;
 		this.nomeComercial = nomeComercial;
 		this.principioAtivo = principioAtivo;
@@ -111,20 +105,20 @@ public class Bula implements Serializable{
 		this.contraIndicacao = contraIndicacao;
 	}
 
-	public String getDir() {
-		return dir;
-	}
-
-	public void setDir(String dir) {
-		this.dir = dir;
-	}
-
 	public String getReacaoAdversa() {
 		return reacaoAdversa;
 	}
 
 	public void setReacaoAdversa(String reacaoAdversa) {
 		this.reacaoAdversa = reacaoAdversa;
+	}
+
+	public String getDir() {
+		return dir;
+	}
+
+	public void setDir(String dir) {
+		this.dir = dir;
 	}
 
 	public Evidencia getEvidencia() {
@@ -141,32 +135,6 @@ public class Bula implements Serializable{
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Bula other = (Bula) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-	
+	}	
 	
 }

@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import com.sibmed.domain.Bula;
 import com.sibmed.domain.Evidencia;
 import com.sibmed.domain.Usuario;
+import com.sibmed.domain.dto.BulaNewDTO;
 import com.sibmed.repositories.BulaRepository;
 import com.sibmed.services.exception.DataIntegrityException;
-import com.sibmed.services.exception.NullPointerException;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
 
@@ -23,10 +23,10 @@ public class BulaService {
 	private static final Logger logger = LoggerFactory.getLogger(BulaService.class);
 	@Autowired
 	private EvidenciaService eService;
-	
+
 	@Autowired
 	private ArquivoService arqService;
-	
+
 	@Autowired
 	private UsuarioService userService;
 
@@ -38,33 +38,41 @@ public class BulaService {
 		return obj.orElseThrow(
 				() -> new ObjectNotFoundException("Bula não encontrada! Id:" + id + ", Tipo: " + Bula.class.getName()));
 	}
-
-	public Bula insert(Bula obj, Integer id) {
-		logger.info("Iniciando inserção");
+	
+	public Bula insert(Bula obj) {
 		obj.setId(null);
-		Usuario objUsuario = userService.find(id);
-		Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
-		logger.info("Evidencia: ", objEvidencia);
-		logger.info("Evidencia_id: ", objEvidencia.getId());
-		logger.info("Evidencia_principioAtivo: ", objEvidencia.getPrincipioAtivo());
-		try {
-			if (objEvidencia != null && objUsuario != null) {
-				obj.setEvidencia(objEvidencia);
-				obj.setUsuario(objUsuario);
-				repo.save(obj);
-				objEvidencia.getBulas().add(obj);
-				objUsuario.getBulas().add(obj);
-				eService.update(objEvidencia);
-				userService.updateBula(objUsuario);
-			}
-		} catch (java.lang.NullPointerException e) {
-			throw new NullPointerException("Não é possível inserir a bula.");
-		}
+		Usuario objUsuario = obj.getUsuario();
+		Evidencia objEvidencia = obj.getEvidencia();
+		repo.save(obj);
+		objEvidencia.getBulas().add(obj);
+		objUsuario.getBulas().add(obj);
+		eService.update(objEvidencia);
+		userService.updateBula(objUsuario);
 		return obj;
 	}
 	
+	public Bula fromDTO(BulaNewDTO obj, Integer id) {
+		logger.info("Iniciando inserção");
+		Usuario objUsuario = userService.find(id);
+		Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
+		logger.info("Evidencia: "+ objEvidencia);
+		logger.info("Evidencia_id: "+ objEvidencia.getId());
+		logger.info("Evidencia_principioAtivo: "+ objEvidencia.getPrincipioAtivo());
+		logger.info("Usuário encontrado! id:"+ objUsuario.getId());
+		if (objEvidencia != null && objUsuario != null){
+			obj.setEvidencia(objEvidencia);
+			obj.setUsuario(objUsuario);	
+		}
+		return new Bula(null,
+				obj.getNomeComercial(),
+				obj.getPrincipioAtivo(),
+				obj.getFabricante(), obj.getIndicacao(),
+				obj.getContraIndicacao(), obj.getReacaoAdversa(), obj.getDir(),
+				obj.getEvidencia(), obj.getUsuario());
+	}
+
 	public void delete(Integer id) {
-		Bula obj=find(id);
+		Bula obj = find(id);
 		try {
 			Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
 			objEvidencia.getBulas().remove(obj);
@@ -74,7 +82,7 @@ public class BulaService {
 			userService.update(objUsuario);
 			eService.update(objEvidencia);
 			repo.deleteById(id);
-		}catch(DataIntegrityViolationException e) {
+		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não foi possível excluir a bula");
 		}
 	}
@@ -91,8 +99,7 @@ public class BulaService {
 
 	public Bula findDiretorio(String dir) {
 		Optional<Bula> obj = repo.findByDir(dir);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Bula não encontrada! Diretório pesquisado:" + dir + ", Tipo: " + Bula.class.getName()));
+		return obj.orElseThrow(() -> new ObjectNotFoundException("Arquivo não encontrado!"));
 	}
 
 	public void update(Bula obj) {
