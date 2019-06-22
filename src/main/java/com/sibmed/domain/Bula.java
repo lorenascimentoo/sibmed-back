@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+
 @Entity
 public class Bula implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -40,10 +41,15 @@ public class Bula implements Serializable{
 	@JoinColumn(name="evidencia_bula_id")
 	private Evidencia evidencia;
 	
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name="usuario_id")
+	private Usuario usuario;
+	
 	public Bula() {	
 	}
 	
-	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir,Evidencia evidencia) {
+	public Bula(Integer id,String nomeComercial, String principioAtivo, String fabricante, String indicacao, String contraIndicacao,String reacaoAdversa, String dir,Evidencia evidencia, Usuario usuario) {
 		this.id = id;
 		this.nomeComercial = nomeComercial;
 		this.principioAtivo = principioAtivo;
@@ -53,6 +59,7 @@ public class Bula implements Serializable{
 		this.reacaoAdversa = reacaoAdversa;
 		this.dir = dir;
 		this.evidencia = evidencia;
+		this.usuario = usuario;
 	}
 
 	public Integer getId() {
@@ -125,6 +132,14 @@ public class Bula implements Serializable{
 
 	public void setEvidencia(Evidencia evidencia) {
 		this.evidencia = evidencia;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.sibmed.domain.Bula;
 import com.sibmed.domain.Evidencia;
+import com.sibmed.domain.Usuario;
 import com.sibmed.repositories.BulaRepository;
 import com.sibmed.services.exception.DataIntegrityException;
 import com.sibmed.services.exception.NullPointerException;
@@ -25,6 +26,9 @@ public class BulaService {
 	
 	@Autowired
 	private ArquivoService arqService;
+	
+	@Autowired
+	private UsuarioService userService;
 
 	@Autowired
 	private BulaRepository repo;
@@ -35,19 +39,23 @@ public class BulaService {
 				() -> new ObjectNotFoundException("Bula não encontrada! Id:" + id + ", Tipo: " + Bula.class.getName()));
 	}
 
-	public Bula insert(Bula obj) {
+	public Bula insert(Bula obj, Integer id) {
 		logger.info("Iniciando inserção");
 		obj.setId(null);
+		Usuario objUsuario = userService.find(id);
 		Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
 		logger.info("Evidencia: ", objEvidencia);
 		logger.info("Evidencia_id: ", objEvidencia.getId());
 		logger.info("Evidencia_principioAtivo: ", objEvidencia.getPrincipioAtivo());
 		try {
-			if (objEvidencia != null) {
+			if (objEvidencia != null && objUsuario != null) {
 				obj.setEvidencia(objEvidencia);
+				obj.setUsuario(objUsuario);
 				repo.save(obj);
 				objEvidencia.getBulas().add(obj);
+				objUsuario.getBulas().add(obj);
 				eService.update(objEvidencia);
+				userService.updateBula(objUsuario);
 			}
 		} catch (java.lang.NullPointerException e) {
 			throw new NullPointerException("Não é possível inserir a bula, nível de evidência não encontrado.");

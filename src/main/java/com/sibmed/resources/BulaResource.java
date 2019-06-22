@@ -69,14 +69,15 @@ public class BulaResource {
 		String resultado = null;
 		for (MultipartFile uploadedFile : uploadingFiles) {
 			try {
+				Integer id=1;
 				File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
 				arquivo = file.getPath();
 				uploadedFile.transferTo(file);
 				arqService.ExtrairPDF(file);
 				Bula b = new Bula(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
 						arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
-						arqService.getReacoesAdversas(), file.getPath(), null);
-				bulaService.insert(b);
+						arqService.getReacoesAdversas(), file.getPath(), null,null);
+				bulaService.insert(b, id);
 				resultado = "Upload feito com sucesso!";
 			} catch (Exception e) {
 				arqService.apagaArquivo(arquivo);
