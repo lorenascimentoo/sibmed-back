@@ -1,35 +1,35 @@
-package com.sibmed.validation;
+package com.sibmed.services.validation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sibmed.domain.Bula;
-import com.sibmed.repositories.BulaRepository;
+import com.sibmed.domain.Usuario;
+import com.sibmed.domain.dto.UsuarioNewDTO;
+import com.sibmed.repositories.UsuarioRepository;
 import com.sibmed.resources.exception.FieldMessage;
 
-public class BulaInsertValidator implements ConstraintValidator<BulaInsert, Bula> {
+public class UsuarioInsertValidator implements ConstraintValidator<UsuarioInsert, UsuarioNewDTO> {
 		
 	
 	@Autowired
-	private BulaRepository repo;
+	private UsuarioRepository repo;
 	
 	@Override
-	public void initialize(BulaInsert ann) {
+	public void initialize(UsuarioInsert ann) {
 	}
 	 	
 		@Override
-		public boolean isValid(Bula obj, ConstraintValidatorContext context) {
+		public boolean isValid(UsuarioNewDTO objDto, ConstraintValidatorContext context) {
 			List<FieldMessage> list = new ArrayList<>();
 			
-			Optional<Bula> aux = repo.findByDir(obj.getDir());
-			if (aux != null) {
-				list.add(new FieldMessage("arquivo", "Bula já existente"));
+			Usuario aux = repo.findByEmail(objDto.getEmail());
+			if(aux !=null) {
+				list.add(new FieldMessage("email", "Email já existente"));
 			}
 			
 			for (FieldMessage e : list) {
@@ -37,8 +37,7 @@ public class BulaInsertValidator implements ConstraintValidator<BulaInsert, Bula
 				context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())
 						.addConstraintViolation();
 			}
-			
-			return list.isEmpty();	
+			return list.isEmpty();
 	}
 
 }

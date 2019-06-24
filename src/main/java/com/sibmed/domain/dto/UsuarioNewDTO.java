@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.sibmed.validation.UsuarioInsert;
+import com.sibmed.services.validation.UsuarioInsert;
 
 @UsuarioInsert
 public class UsuarioNewDTO implements Serializable {
@@ -19,9 +19,7 @@ public class UsuarioNewDTO implements Serializable {
 	@NotEmpty(message = "Preenchimento obrigatório")
 	private String senha;
 
-	public UsuarioNewDTO(@NotEmpty(message = "Preenchimento obrigatório") String nome,
-			@NotEmpty(message = "Preenchimento obrigatório") String email,
-			@NotEmpty(message = "Preenchimento obrigatório") String senha) {
+	public UsuarioNewDTO(String nome,String email, String senha) {
 		super();
 		this.nome = nome;
 		this.email = email;

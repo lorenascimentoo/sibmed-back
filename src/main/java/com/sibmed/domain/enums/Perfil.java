@@ -2,7 +2,8 @@ package com.sibmed.domain.enums;
 
 public enum Perfil {
 	
-	USUARIO(1, "ROLE_USUARIO");
+	ADMIN(1, "ROLE_ADMIN"),
+	USUARIO(2, "ROLE_USUARIO");
 
  	private int cod;
 	private String descricao;

@@ -1,4 +1,4 @@
-package com.sibmed.validation;
+package com.sibmed.services.validation;
 
 import java.util.ArrayList;
 import java.util.List;

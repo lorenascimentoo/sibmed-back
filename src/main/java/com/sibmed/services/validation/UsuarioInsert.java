@@ -1,4 +1,4 @@
-package com.sibmed.validation;
+package com.sibmed.services.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

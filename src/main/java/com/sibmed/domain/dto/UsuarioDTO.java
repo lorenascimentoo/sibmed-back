@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotEmpty;
 
 import com.sibmed.domain.Usuario;
-import com.sibmed.validation.UsuarioUpdate;
+import com.sibmed.services.validation.UsuarioUpdate;
 
 @UsuarioUpdate
 public class UsuarioDTO implements Serializable {

@@ -1,4 +1,4 @@
-package com.sibmed.validation;
+package com.sibmed.services.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-@Constraint(validatedBy = UsuarioUpdateValidator.class)
+@Constraint(validatedBy = BulaInsertValidator.class)
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UsuarioUpdate {
+public @interface BulaInsert {
 	String message() default "Erro de validação";
 
  	Class<?>[] groups() default {};

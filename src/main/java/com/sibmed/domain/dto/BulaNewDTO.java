@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.sibmed.domain.Evidencia;
 import com.sibmed.domain.Usuario;
-import com.sibmed.validation.BulaInsert;
+import com.sibmed.services.validation.BulaInsert;
 
 
 @BulaInsert

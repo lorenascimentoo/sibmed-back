@@ -9,6 +9,6 @@ import com.sibmed.domain.Usuario;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer>{
 	
-	@Transactional(readOnly=true)
+	@Transactional
 	Usuario findByEmail(String email);
 }

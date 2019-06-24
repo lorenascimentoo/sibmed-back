@@ -16,6 +16,7 @@ import com.sibmed.domain.enums.TipoEstadoPaciente;
 import com.sibmed.repositories.BulaRepository;
 import com.sibmed.repositories.EvidenciaRepository;
 import com.sibmed.repositories.SituacaoPacienteRepository;
+import com.sibmed.repositories.UsuarioRepository;
 import com.sibmed.services.utils.IndexadorService;
 
 @Service
@@ -37,7 +38,7 @@ public class DBService {
 	private BCryptPasswordEncoder pe;
 	
 	@Autowired
-	private UsuarioService userService;
+	private UsuarioRepository usuarioRepostiry;
 
 	public void instantiateTestDatabase() throws ParseException {
 		
@@ -68,7 +69,7 @@ public class DBService {
 		
 		
 		
-		userService.insert(u1);
+		usuarioRepostiry.save(u1);
 		bulaRepository.saveAll(Arrays.asList(b1, b2));
 		evidenciaRepository.saveAll(Arrays.asList(e1, e2));
 		sitPacienteRepository.saveAll(Arrays.asList(sp1, sp2, e2_sp1, e2_sp2));
