@@ -2,11 +2,13 @@ package com.sibmed.resources;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,20 +41,21 @@ public class BulaResource {
 
 	@Autowired
 	private BuscadorService buscaService;
-
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findAll() throws ObjectNotFoundException {
 		List<Bula> list = bulaService.findAll();
 		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
-
+	
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Bula> find(@PathVariable Integer id) {
 		Bula obj = bulaService.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
-
+	
 	@RequestMapping(value = "/busca", method = RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findBula(
 			@RequestParam(value = "indicacao", defaultValue = "null") String indicacao,
@@ -63,11 +66,12 @@ public class BulaResource {
 		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
-
+	
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public ResponseEntity<String> uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles)
+	public ResponseEntity<List<String>> uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles)
 			throws IOException {
-		String resultado = null;
+		List<String>resultado = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadingFiles) {
 			File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
 			uploadedFile.transferTo(file);
@@ -75,15 +79,20 @@ public class BulaResource {
 			BulaNewDTO bulaDTO = new BulaNewDTO(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
 					arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
 					arqService.getReacoesAdversas(), file.getPath(), null, null);
-			Bula b = bulaService.fromDTO(bulaDTO, 1);
-			bulaService.insert(b);
-			resultado = "Upload feito com sucesso!";
+			Bula b = bulaService.fromDTO(bulaDTO);
+			b=bulaService.insert(b);
+			if (b != null) {
+				resultado.add("Upload realizado com sucesso! Arquivo: " + file.getPath());
+			} else {
+				resultado.add("Bula já inserida no sistema!Arquivo: " + file.getPath());
+			}	
 		}
-
+		
 		indexService.indexaArquivosDoDiretorio();
 		return ResponseEntity.ok().body(resultado);
 	}
-
+	
+	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		bulaService.delete(id);

@@ -21,18 +21,13 @@ import com.sibmed.services.UsuarioService;
 @RestController
 @RequestMapping(value = "/usuarios")
 public class UsuarioResource {
+	
 	@Autowired
 	private UsuarioService userService;
 
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<Usuario> find(@PathVariable Integer id) {
 		Usuario obj = userService.find(id);
-		return ResponseEntity.ok().body(obj);
-	}
-	//apenas para teste
-	@RequestMapping(value="/email/{email}",method=RequestMethod.GET)
-	public ResponseEntity<Usuario> findEmail(@PathVariable String email) {
-		Usuario obj = userService.findByEmail(email);
 		return ResponseEntity.ok().body(obj);
 	}
 	
