@@ -16,6 +16,7 @@ import com.sibmed.domain.dto.BulaNewDTO;
 import com.sibmed.repositories.BulaRepository;
 import com.sibmed.security.UserSS;
 import com.sibmed.services.exception.DataIntegrityException;
+import com.sibmed.services.exception.JdbcSQLException;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
 
@@ -40,6 +41,13 @@ public class BulaService {
 				() -> new ObjectNotFoundException("Bula não encontrada! Id:" + id + ", Tipo: " + Bula.class.getName()));
 	}
 	
+	public List<Bula> findUser() {
+		UserSS user = UserService.authenticated();
+		Usuario objUsuario = userService.find(user.getId());
+		List<Bula> obj = repo.findByUsuario(objUsuario);
+		return obj;
+	}
+	
 	public Bula insert(Bula obj) {		
 		obj.setId(null);
 		Usuario objUsuario = obj.getUsuario();
@@ -55,18 +63,21 @@ public class BulaService {
 	public Bula fromDTO(BulaNewDTO obj) {
 		logger.info("Iniciando inserção");
 		UserSS user = UserService.authenticated();
-		
 		Evidencia objEvidencia = eService.findPrincAtivo(obj.getPrincipioAtivo());
 		logger.info("Evidencia: "+ objEvidencia);
 		logger.info("Evidencia_id: "+ objEvidencia.getId());
 		logger.info("Evidencia_principioAtivo: "+ objEvidencia.getPrincipioAtivo());
 		Usuario objUsuario = userService.find(user.getId());
 		logger.info("Usuário encontrado! id:"+ objUsuario.getId());
-		
+		try {
 		if (objEvidencia != null && objUsuario != null){
 			obj.setEvidencia(objEvidencia);
 			obj.setUsuario(objUsuario);	
+			}
+		} catch(JdbcSQLException e) {
+			throw new JdbcSQLException("Bula já está inserida no sistema");
 		}
+		
 		return new Bula(null,
 				obj.getNomeComercial(),
 				obj.getPrincipioAtivo(),

@@ -20,6 +20,7 @@ import com.sibmed.domain.Bula;
 import com.sibmed.domain.dto.BulaDTO;
 import com.sibmed.domain.dto.BulaNewDTO;
 import com.sibmed.services.BulaService;
+import com.sibmed.services.exception.JdbcSQLException;
 import com.sibmed.services.exception.ObjectNotFoundException;
 import com.sibmed.services.utils.ArquivoService;
 import com.sibmed.services.utils.BuscadorService;
@@ -49,6 +50,13 @@ public class BulaResource {
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
+	@PreAuthorize("hasAnyRole('USUARIO')")
+	@RequestMapping(value = "/usuario",method = RequestMethod.GET)
+	public ResponseEntity<List<BulaDTO>> findUser() throws ObjectNotFoundException {
+		List<Bula> list = bulaService.findUser();
+		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Bula> find(@PathVariable Integer id) {
@@ -60,7 +68,7 @@ public class BulaResource {
 	public ResponseEntity<List<BulaDTO>> findBula(
 			@RequestParam(value = "indicacao", defaultValue = "null") String indicacao,
 			@RequestParam(value = "contraIndicacao", defaultValue = "null") String contraIndicacao,
-			@RequestParam(value = "reacaoAdversa", defaultValue = "null") String reacaoAdversa) {
+			@RequestParam(value = "reacaoAdversa", defaultValue = "null") String reacaoAdversa){
 		buscaService.buscaComParser(indicacao, contraIndicacao, reacaoAdversa);
 		List<Bula> list = buscaService.getList();
 		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
@@ -70,7 +78,7 @@ public class BulaResource {
 	@PreAuthorize("hasAnyRole('USUARIO')")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public ResponseEntity<List<String>> uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles)
-			throws IOException {
+			throws IOException, JdbcSQLException {
 		List<String>resultado = new ArrayList<>();
 		for (MultipartFile uploadedFile : uploadingFiles) {
 			File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
