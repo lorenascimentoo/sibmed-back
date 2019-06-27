@@ -11,6 +11,7 @@ public class SibmedApplication implements CommandLineRunner {
 		SpringApplication.run(SibmedApplication.class, args);
 	}
 	@Override
+	
 	public void run(String... args) throws Exception {
 	}
 }

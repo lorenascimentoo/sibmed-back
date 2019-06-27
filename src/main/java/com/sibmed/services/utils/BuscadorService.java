@@ -9,10 +9,14 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -181,11 +185,26 @@ public class BuscadorService {
 	
 	private void buscaBooleana(String par1,String par2, String par3, IndexSearcher buscador) throws Exception {
 		try {
-			QueryParser parser = new QueryParser("reacoesAdversas", new StandardAnalyzer());
-			Query consulta = parser.parse(par1);
+			
+			BooleanQuery.Builder builder = new BooleanQuery.Builder();
+			
+			BooleanQuery.Builder subBuilder = new BooleanQuery.Builder();
+		    TermQuery termQuery1 = new TermQuery(new Term("indicacoes", par1));
+		    subBuilder.add(termQuery1, BooleanClause.Occur.MUST);
+		    
+		    TermQuery termQuery2 = new TermQuery(new Term("contraIndicacoes", par2));
+		    subBuilder.add(termQuery2, BooleanClause.Occur.MUST);
+		    
+		    TermQuery termQuery3 = new TermQuery(new Term("reacoesAdversas", par3));
+		    subBuilder.add(termQuery3, BooleanClause.Occur.MUST);
+		    
+		    builder.add(subBuilder.build(), BooleanClause.Occur.MUST);
+
+		    BooleanQuery booleanQuery = builder.build();
+		 
 			long inicio = System.currentTimeMillis();
 			
-			TopDocs resultado = buscador.search(consulta, 100);
+			TopDocs resultado = buscador.search(booleanQuery, 100);
 
 			long fim = System.currentTimeMillis();
 			int totalDeOcorrencias = resultado.totalHits;
