@@ -14,7 +14,7 @@ import com.sibmed.domain.Usuario;
 public interface BulaRepository extends JpaRepository<Bula, Integer>{
 	
 	Optional<Bula> findById(Integer id);
-	Optional<Bula> findByPrincipioAtivo(String principioAtivo);
+	List<Bula> findByPrincipioAtivo(String principioAtivo);
 	List<Bula> findByUsuario(Usuario usuario);
 	
 	@Transactional(readOnly=true)

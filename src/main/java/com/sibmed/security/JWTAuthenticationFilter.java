@@ -24,7 +24,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
  	private AuthenticationManager authenticationManager;
 
      private JWTUtil jwtUtil;
-
+     private String token = null;
+     
      public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
     	setAuthenticationFailureHandler(new JWTAuthenticationFailureHandler());
         this.authenticationManager = authenticationManager;
@@ -57,10 +58,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
  		String username = ((UserSS) auth.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
+        this.token = token;
         res.addHeader("Authorization", "Bearer " + token);
+        res.setStatus(200);
+        res.setContentType("application/json");
+        res.getWriter().append(json());
 	}
 
- 	private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
+ 	private String json() {
+		return "" + this.token;
+	}
+
+	private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
          @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
@@ -78,5 +87,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 + "\"message\": \"Email ou senha inválidos\", "
                 + "\"path\": \"/login\"}";
         }
+         
     }
 }

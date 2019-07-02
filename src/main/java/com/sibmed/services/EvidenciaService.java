@@ -36,6 +36,10 @@ public class EvidenciaService {
 	}
 	
 	private void updateData(Evidencia newObj, Evidencia obj) {
+		newObj.setId(obj.getId());
+		newObj.setCategoria(obj.getCategoria());
+		newObj.setPrincipioAtivo(obj.getPrincipioAtivo());
 		newObj.setBulas(obj.getBulas());
+		newObj.setSituacaoPaciente(obj.getSituacaoPaciente());
 	}
 }

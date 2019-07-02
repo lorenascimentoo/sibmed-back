@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sibmed.domain.enums.TipoEstadoPaciente;
 @Entity
 public class SituacaoPaciente implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -19,7 +18,7 @@ public class SituacaoPaciente implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
-	private Integer estado;
+	private String estado;
 	private String periodo;
 	
 	@JsonIgnore
@@ -30,10 +29,10 @@ public class SituacaoPaciente implements Serializable{
 	public SituacaoPaciente() {
 	}
 	
-	public SituacaoPaciente(Integer id, TipoEstadoPaciente estado, String periodo, Evidencia evidencia) {
+	public SituacaoPaciente(Integer id, String estado, String periodo, Evidencia evidencia) {
 		super();
 		this.id = id;
-		this.estado = (estado == null) ? null : estado.getCod();;
+		this.estado = estado;
 		this.periodo = periodo;
 		this.evidencia = evidencia;
 	}
@@ -46,11 +45,11 @@ public class SituacaoPaciente implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(Integer estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

@@ -50,6 +50,7 @@ public class BuscadorService {
 	public void buscaComParser(String indicacao, String contraIndicacao, String reacaoAdversa) {
 		
 		try {
+			list.clear();
 			IndexSearcher buscador = criarLeitor();
 			logger.info("Dados recebidos: " + indicacao + ", " +contraIndicacao+ ", " +reacaoAdversa);
 			
@@ -76,7 +77,7 @@ public class BuscadorService {
 
 	private void buscaIndicacao(String parametro, IndexSearcher buscador) throws Exception {
 		try {
-		
+			
 			QueryParser parser = new QueryParser("indicacoes", new StandardAnalyzer());
 			Query consulta = parser.parse(parametro);
 			long inicio = System.currentTimeMillis();

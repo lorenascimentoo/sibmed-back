@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sibmed.domain.enums.TipoCategoria;
 
 @Entity
 public class Evidencia implements Serializable{
@@ -26,7 +25,7 @@ public class Evidencia implements Serializable{
 
 	private String principioAtivo;
 	
-	private Integer categoria;
+	private String categoria;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="evidencia")
@@ -40,11 +39,11 @@ public class Evidencia implements Serializable{
 	public Evidencia() {
 	}
 	
-	public Evidencia(Integer id, String principioAtivo, TipoCategoria categoria) {
+	public Evidencia(Integer id, String principioAtivo, String categoria) {
 		super();
 		this.id = id;
 		this.principioAtivo = principioAtivo;
-		this.categoria = (categoria == null) ? null : categoria.getCod();
+		this.categoria = categoria;
 	}
 	
 	public Integer getId() {
@@ -59,10 +58,10 @@ public class Evidencia implements Serializable{
 	public void setPrincipioAtivo(String principioAtivo) {
 		this.principioAtivo = principioAtivo;
 	}
-	public Integer getCategoria() {
+	public String getCategoria() {
 		return categoria;
 	}
-	public void setCategoria(Integer categoria) {
+	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 	

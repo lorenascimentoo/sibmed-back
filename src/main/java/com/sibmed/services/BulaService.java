@@ -106,10 +106,9 @@ public class BulaService {
 		return repo.findAll();
 	}
 
-	public Bula findPrincAtivo(String princAtivo) {
-		Optional<Bula> obj = repo.findByPrincipioAtivo(princAtivo);
-		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Bula não encontrada! Principio Ativo:" + princAtivo + ", Tipo: " + Bula.class.getName()));
+	public List<Bula> findPrincAtivo(String princAtivo) {
+		List<Bula> obj = repo.findByPrincipioAtivo(princAtivo);
+		return obj;
 	}
 
 	public Bula findDiretorio(String dir) {

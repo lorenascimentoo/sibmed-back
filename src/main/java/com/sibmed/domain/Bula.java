@@ -38,7 +38,7 @@ public class Bula implements Serializable{
 	@Column(unique=true)
 	private String dir;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name="evidencia_bula_id")
 	private Evidencia evidencia;
 	

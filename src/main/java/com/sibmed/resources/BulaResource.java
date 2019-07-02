@@ -64,6 +64,13 @@ public class BulaResource {
 		return ResponseEntity.ok().body(obj);
 	}
 	
+	@RequestMapping(value = "/principioativo/{princAtivo}", method = RequestMethod.GET)
+	public ResponseEntity<List<BulaDTO>> find(@PathVariable String princAtivo) {
+		List<Bula> list = bulaService.findPrincAtivo(princAtivo);
+		List<BulaDTO> listDTO = list.stream().map(obj -> new BulaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
 	@RequestMapping(value = "/busca", method = RequestMethod.GET)
 	public ResponseEntity<List<BulaDTO>> findBula(
 			@RequestParam(value = "indicacao", defaultValue = "null") String indicacao,
