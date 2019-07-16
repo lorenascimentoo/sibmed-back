@@ -87,20 +87,29 @@ public class BulaResource {
 	public ResponseEntity<List<String>> uploadingPost(@RequestParam("file") MultipartFile[] uploadingFiles)
 			throws IOException, JdbcSQLException {
 		List<String>resultado = new ArrayList<>();
+		String arquivo = null;
 		for (MultipartFile uploadedFile : uploadingFiles) {
+			try {
 			File file = new File(uploadingDir + uploadedFile.getOriginalFilename());
+			arquivo = file.getPath();
 			uploadedFile.transferTo(file);
 			arqService.ExtrairPDF(file);
 			BulaNewDTO bulaDTO = new BulaNewDTO(null, arqService.getNomeComercial(), arqService.getPrincipioAtivo(),
 					arqService.getFabricante(), arqService.getIndicacoes(), arqService.getContraIndicacoes(),
 					arqService.getReacoesAdversas(), file.getPath(), null, null);
 			Bula b = bulaService.fromDTO(bulaDTO);
-			b=bulaService.insert(b);
+			bulaService.insert(b);
 			if (b != null) {
 				resultado.add("Upload realizado com sucesso! Arquivo: " + file.getPath());
+				
 			} else {
 				resultado.add("Bula já inserida no sistema!Arquivo: " + file.getPath());
-			}	
+				arqService.apagaArquivo(file.getPath());
+			}
+			} catch (Exception e) {
+				arqService.apagaArquivo(arquivo);
+				throw new JdbcSQLException("Erro ao inserir a bula, verifique se a bula já está cadastrada ou solicite o cadastro do nível de evidência do principio ativo");
+			}
 		}
 		
 		indexService.indexaArquivosDoDiretorio();

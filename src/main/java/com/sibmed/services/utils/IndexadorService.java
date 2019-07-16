@@ -38,7 +38,6 @@ public class IndexadorService {
 			this.writer = writer;
 			long inicio = System.currentTimeMillis();
 			indexaArquivosDoDiretorio(new File(diretorioParaIndexar));
-
 			writer.commit();
 			writer.close();
 			long fim = System.currentTimeMillis();

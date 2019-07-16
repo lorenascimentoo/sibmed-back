@@ -15,7 +15,6 @@ import com.sibmed.repositories.BulaRepository;
 import com.sibmed.repositories.EvidenciaRepository;
 import com.sibmed.repositories.SituacaoPacienteRepository;
 import com.sibmed.repositories.UsuarioRepository;
-import com.sibmed.services.utils.IndexadorService;
 
 @Service
 public class DBService {
@@ -29,8 +28,6 @@ public class DBService {
 	@Autowired
 	private SituacaoPacienteRepository sitPacienteRepository;
 
-	@Autowired
-	private IndexadorService indexService;
 	
 	@Autowired
 	private BCryptPasswordEncoder pe;
@@ -75,6 +72,12 @@ public class DBService {
 				"Compatível em doses habituais.", e4);
 		e4.getSituacaoPaciente().addAll(Arrays.asList(e4_sp1, e4_sp2));
 		
+		Evidencia e5 = new Evidencia(null, "FANCICLOVIR", "RISCO C");
+		SituacaoPaciente e5_sp1 = new SituacaoPaciente(null, "GRAVIDEZ",
+				"Não há estudos controlados.", e5);
+		SituacaoPaciente e5_sp2 = new SituacaoPaciente(null, "LACTANTE",
+				"contra-indicada para evitar transmissão vertical do vírus para o RN.", e5);
+		e5.getSituacaoPaciente().addAll(Arrays.asList(e5_sp1, e5_sp2));
 		
 		Bula b1 = new Bula(null, "nome", "principioAtivo", "fabricante", "indicacao", "contraIndicacao",
 				"reacaoAdversa", "dir", e1,u1);
@@ -90,9 +93,8 @@ public class DBService {
 		
 		usuarioRepostiry.save(u1);
 		bulaRepository.saveAll(Arrays.asList(b1, b2));
-		evidenciaRepository.saveAll(Arrays.asList(e1,e2,e3,e4));
-		sitPacienteRepository.saveAll(Arrays.asList(e1_sp1, e1_sp2, e2_sp1, e2_sp2, e3_sp1,e3_sp2,e4_sp1,e4_sp2));
+		evidenciaRepository.saveAll(Arrays.asList(e1,e2,e3,e4,e5));
+		sitPacienteRepository.saveAll(Arrays.asList(e1_sp1, e1_sp2, e2_sp1, e2_sp2, e3_sp1,e3_sp2,e4_sp1,e4_sp2,e5_sp1,e5_sp2));
 
-		indexService.indexaArquivosDoDiretorio();
 	}
 }

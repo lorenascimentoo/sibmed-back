@@ -73,10 +73,10 @@ public class BulaService {
 		if (objEvidencia != null && objUsuario != null){
 			obj.setEvidencia(objEvidencia);
 			obj.setUsuario(objUsuario);	
-			}
+		}
 		} catch(JdbcSQLException e) {
 			throw new JdbcSQLException("Bula já está inserida no sistema");
-		}
+		} 
 		
 		return new Bula(null,
 				obj.getNomeComercial(),

@@ -20,8 +20,7 @@ public class ArquivoService {
 	private String indicacoes=null;
 	private String contraIndicacoes=null;
 	private String reacoesAdversas=null;
-	private String textoExtraido=null;	
-	
+	private String textoExtraido=null;
 	
 	public void ExtrairPDF(File arquivo) throws IOException{
 		
@@ -41,7 +40,7 @@ public class ArquivoService {
 				
 				List<String> dados = getBulasInfo(pdfFileInText);
 			   	
-				this.nomeComercial = filename[1].toUpperCase().replace(".PDF", "");
+				this.nomeComercial = filename[1].toUpperCase();
 				this.principioAtivo = filename[0].toUpperCase();
 				this.fabricante = dados.get(0).toUpperCase();
 				this.indicacoes = dados.get(1);
@@ -73,33 +72,34 @@ public class ArquivoService {
 		
 		dados.add(fabricante);
 		
-		List<String> indicacao = new ArrayList<String>();
-		List<String> contraIndicacao = new ArrayList<String>();
-		List<String> reacaoAdversa = new ArrayList<String>();
+		StringBuffer indicacao = new StringBuffer();
+		StringBuffer contraIndicacao = new StringBuffer();
+		StringBuffer reacaoAdversa = new StringBuffer();
 		for (int i = 0; i < line.size(); i++) {
 			String linha = line.get(i);
 			if (linha.contains("PARA")) {
 				int j = i;
 				while (!line.get(j).contains("NÃO")) {
-					indicacao.add(line.get(j));
+					indicacao.append(line.get(j));
 					j++;
 				}
 			} else if (linha.contains("NÃO")) {
 				int j = i;
 				while (!line.get(j).contains("SABER")) {
-					contraIndicacao.add(line.get(j));
+					contraIndicacao.append(line.get(j));
 					j++;
 				}
 
 			} else if (linha.contains("MALES")) {
 				int j = i;
 				while (!line.get(j).contains("QUANTIDADE")) {
-					reacaoAdversa.add(line.get(j));
+					reacaoAdversa.append(line.get(j));
 					j++;
 				}
 			}
 
 		}
+
 		dados.add(getString(indicacao));
 		dados.add(getString(contraIndicacao));
 		dados.add(getString(reacaoAdversa));
@@ -107,9 +107,9 @@ public class ArquivoService {
 		return dados;
 	}
 
-	private static String getString(List<String> lista) {
+	private static String getString(StringBuffer lista) {
 		String dado = lista.toString();
-		dado = dado.replaceAll("\\d.", "");
+		dado = dado.replaceAll("\\d.", "").replace("?", "?\n").replace(":", ":\n").replace(";", ";\n");
 		return dado;
 	}
 
